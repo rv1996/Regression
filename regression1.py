@@ -38,6 +38,14 @@ X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
 clf = LinearRegression()
 clf.fit(X_train,y_train)
 # printing the accuracy of the model we trained
-print(clf.score(X_test,y_test))
+print("using linear regression -",clf.score(X_test,y_test))
 
+clfSVM = svm.SVR()
+clfSVM.fit(X_train,y_train)
+print("using Support vector machine with linear kernel -",clfSVM.score(X_test,y_test))
 
+clfSVMPoly = svm.SVR(kernel="poly")
+clfSVMPoly.fit(X_train,y_train)
+print("using Support vector machine with polynomial kernel -",clfSVMPoly.score(X_test,y_test))
+
+# clear svm doesn't work well in this case
