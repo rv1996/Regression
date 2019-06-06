@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 from matplotlib import style
+import pickle
+from pathlib import Path
 
 style.use('ggplot')
 
@@ -44,17 +46,52 @@ y = np.array(df['label'])
 
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
 
-clf = LinearRegression()
-clf.fit(X_train,y_train)
+
+# pickle this classifier
+
+clf_file = Path("linearRegression.pickle")
+if clf_file.is_file():
+    pickle_in = open("linearRegression.pickle","rb")
+    clf = pickle.load(pickle_in)
+else:
+    print("will train linear classifier")
+    clf = LinearRegression()
+    clf.fit(X_train,y_train)
+    with open("linearRegression.pickle","wb") as f:
+        pickle.dump(clf,f)  # dump the classifier in f
+
+
+
 # printing the accuracy of the model we trained
 print("using linear regression -",clf.score(X_test,y_test))
 
-clfSVM = svm.SVR(gamma="auto")
-clfSVM.fit(X_train,y_train)
+
+clfSVM_file = Path("SVMlinear.pickle")
+if clfSVM_file.is_file():
+    pickle_in = open("SVMlinear.pickle","rb")
+    clfSVM = pickle.load(pickle_in)
+else:
+    print("Will train SVM linear")
+    clfSVM = svm.SVR(gamma="auto")
+    clfSVM.fit(X_train,y_train)
+    with open("SVMlinear.pickle","wb") as f:
+        pickle.dump(clfSVM,f)
+
 print("using Support vector machine with linear kernel -",clfSVM.score(X_test,y_test))
 
-clfSVMPoly = svm.SVR(kernel="poly",gamma="scale")
-clfSVMPoly.fit(X_train,y_train)
+
+clfSVMPoly_file = Path("clfSVMPoly.pickle")
+
+if clfSVMPoly_file.is_file():
+    pickle_in = open("clfSVMPoly.pickle","rb")
+    clfSVMPoly = pickle.load(pickle_in)
+else:
+    print("Will train SVM with polynomial kernel")
+    clfSVMPoly = svm.SVR(kernel="poly",gamma="scale")
+    clfSVMPoly.fit(X_train,y_train)
+    with open("clfSVMPoly.pickle","wb") as f:
+        pickle.dump(clfSVMPoly,f)
+
 print("using Support vector machine with polynomial kernel -",clfSVMPoly.score(X_test,y_test))
 
 # clear svm doesn't work well in this case
@@ -76,6 +113,10 @@ for i in prediction_set:
     next_unix += oneday
     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1) ] + [i]
 
+# these print statement will give a better understanding about the above forloop
+# try uncommenting those
+# print(df.head())
+# print(df.tail())
 
 df['Adj. Close'].plot()
 df['Forecast'].plot()
