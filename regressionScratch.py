@@ -2,6 +2,7 @@ from statistics import mean
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
+from meanError import *
 
 style.use("fivethirtyeight")
 
@@ -20,6 +21,9 @@ print(m,b)
 regression_line = [(m*x)+b for x in xs]
 predict_x = 11
 predict_y = predict_x*m + b
+
+r_squared = coefficent_of_determination(ys,regression_line)
+print("R squared mean error ",r_squared)
 
 plt.scatter(xs,ys)
 plt.scatter(predict_x,predict_y,color="g")
