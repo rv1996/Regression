@@ -25,7 +25,7 @@ forecast_column = "Adj. Close"
 df.fillna(-99999,inplace=True) # filling the value which is not a number 
 # the corresponding value will be treated as an outlier in the dataset
 
-forecast_out = int(math.ceil(0.01*len(df))) # creating is to shift the data frame this much percentage upward..
+forecast_out = int(math.ceil(0.1*len(df))) # creating is to shift the data frame this much percentage upward..
 # so that we have the featured predicting the price in future == that percent in future
 # we don't actually have a label and to make a future prediction we are doing this
 
